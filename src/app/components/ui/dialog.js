@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 import PropTypes from "prop-types";
 
 // VisuallyHidden component for hiding content from the display but keeping it accessible to screen readers
