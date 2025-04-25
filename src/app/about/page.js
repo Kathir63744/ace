@@ -1,43 +1,20 @@
 "use client"
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Award,
-  BookOpen,
-  Users,
-  Target,
-  Calendar,
-  MessageSquare,
-  Star,
-  TrendingUp,
-  CheckCircle,
-  Coffee,
-  Briefcase,
-  GraduationCap,
-  Code,
-  LineChart,
-  Brain,
-  Laptop,
-  UserPlus,
-  Rocket,
-  X,
-  Menu,
-  ChevronDown,
-  ChevronUp,
-  Globe,
-  Heart,
-  MapPin,
-  Lightbulb,
-  Share2,
-} from 'lucide-react';
+import { Award, BookOpen, Users, Target, Calendar, MessageSquare, Star, TrendingUp, CheckCircle, Coffee, Briefcase, GraduationCap, Code, LineChart, Brain, Laptop, UserPlus, Rocket, X, Menu, ChevronDown, ChevronUp, Globe, Heart, MapPin, Lightbulb, Share2 } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '../../lib/utils';
+
 function App() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeFaq, setActiveFaq] = useState(false); 
+  const [activeFaq, setActiveFaq] = useState(null); 
+  
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
   }, []);
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -45,6 +22,7 @@ function App() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
   const navLinks = [
     { name: "About", path: "/about" },
     { name: "Course", path: "/courses" },
@@ -53,6 +31,7 @@ function App() {
     { name: "Pricing", path: "/pricing" },
     { name: "Contact", path: "/contact" },
   ];
+  
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -73,12 +52,14 @@ function App() {
       content: "The digital marketing course provided real-world applications that I could implement immediately."
     }
   ];
+  
   const stats = [
     { icon: Users, label: "Active Students", value: "10,000+" },
     { icon: BookOpen, label: "Courses", value: "150+" },
     { icon: Award, label: "Certifications", value: "50+" },
     { icon: Target, label: "Success Rate", value: "95%" }
   ];
+  
   const careerPaths = [
     {
       title: "Technology",
@@ -96,6 +77,7 @@ function App() {
       roles: ["Digital Marketer", "UX Designer", "Content Strategist", "SEO Specialist"]
     }
   ];
+  
   const teamMembers = [
     {
       name: "Dr. Alexandra Chen",
@@ -122,6 +104,7 @@ function App() {
       bio: "Corporate recruiter turned educator, David bridges the gap between education and employment opportunities."
     }
   ];
+  
   const historyTimeline = [
     {
       year: "2015",
@@ -154,7 +137,7 @@ function App() {
     { name: "TechGiant", logo: "/Samsung.png" },
     { name: "InnovateNow", logo: "/visa.png" },
     { name: "FutureWorks", logo: "/vk.png" },
-    { name: "GlobalSoft", logo: " /google-2015-logo-3649.png" },
+    { name: "GlobalSoft", logo: "/google-2015-logo-3649.png" },
     { name: "DataSphere", logo: "/P_G_.png" },
     { name: "CloudPeak", logo: "/Cipla_logo.svg.png" }
   ];
@@ -181,6 +164,7 @@ function App() {
       answer: "Absolutely. Our certifications are developed in partnership with industry leaders and are widely recognized by employers across the technology and business sectors."
     }
   ];
+  
   const values = [
     {
       icon: Lightbulb,
@@ -203,58 +187,63 @@ function App() {
       description: "Quality education should be accessible to motivated learners regardless of background."
     }
   ];
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav
-        className={`bg-white p-3 h-16 flex items-center fixed top-0 w-full shadow-md z-50 transition-all duration-300 ${
+        className={cn(
+          "bg-white p-3 h-16 flex items-center fixed top-0 w-full shadow-md z-50 transition-all duration-300",
           isScrolled ? "shadow-lg h-14" : ""
-        }`}
+        )}
       >
         <div className="container mx-auto flex items-center justify-between">
-          <a href="/" className="flex items-center">
-            <img
-              src="/logoref1.png"
-              alt="Logo"
-              className="h-12 w-12 ml-12"
-            />
-            <h1 className="font-bold text-black text-lg ml-4">AceLevelUp</h1>
-          </a>
+          <Link href="/" className="flex items-center">
+            <h1 className="font-bold text-black text-lg ml-4 sm:ml-12">AceLevelUp</h1>
+          </Link>
+          
           {/* Mobile Menu Button */}
-          <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label="Toggle menu">
+          <button 
+            className="md:hidden flex items-center mr-4" 
+            onClick={toggleMobileMenu} 
+            aria-label="Toggle menu"
+          >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+          
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8 text-blue-950 mr-6">
             {navLinks.map(({ name, path }) => (
-              <a
+              <Link
                 key={name}
                 href={path}
                 className="relative overflow-hidden text-md-400 text-gray-900 font-bold hover:text-purple-700 font-sans transition-colors"
               >
                 {name}
-              </a>
+              </Link>
             ))}
           </div>
+          
           {/* Mobile Navigation (Dropdown) */}
           {mobileMenuOpen && (
             <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg py-4 flex flex-col items-center space-y-4">
               {navLinks.map(({ name, path }) => (
-                <a
+                <Link
                   key={name}
                   href={path}
                   className="text-gray-900 font-bold hover:text-black transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {name}
-                </a>
+                </Link>
               ))}
             </div>
           )}
         </div>
       </nav>
+      
       {/* Hero Section */}
-      <section className="pt-16 mt-5 relative w-full h-[500px] bg-cover bg-center bg-no-repeat flex items-center">
+      <section className="pt-16 mt-5 relative w-full h-[500px] md:h-[600px] bg-cover bg-center bg-no-repeat flex items-center">
         <div 
           className="absolute inset-0 bg-black/60" 
           style={{ 
@@ -265,34 +254,35 @@ function App() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-violet-900/80 to-indigo-900/80"></div>
         </div>
-        <div className="relative z-10 container mx-auto px-8">
+        <div className="relative z-10 container mx-auto px-4 sm:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
               Transform Your Future with
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 block mt-2">
                 AceLevelUp
               </span>
             </h1>
-            <p className="text-xl text-gray-200 max-w-2xl mb-8 leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-200 max-w-2xl mb-8 leading-relaxed">
               Together, our team of enthusiastic teachers, subject-matter specialists, and tech innovators creates a smooth, engaging, and successful learning environment. 
             </p>
-            <div className="flex gap-4">
-              <button className="px-8 py-4 bg-violet-600 text-white font-bold text-lg rounded-lg hover:bg-violet-700 transition-colors duration-300">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-violet-600 text-white font-bold text-lg rounded-lg hover:bg-violet-700 transition-colors duration-300">
                 Explore Courses
               </button>
-              <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white/10 transition-colors duration-300">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white/10 transition-colors duration-300">
                 Learn More
               </button>
             </div>
           </motion.div>
         </div>
       </section>
+      
       {/* Mission Statement Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
@@ -301,22 +291,23 @@ function App() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl font-bold text-gray-900 mb-8">Our Mission</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">Our Mission</h2>
               <div className="h-1 w-20 bg-violet-600 mx-auto mb-8"></div>
-              <p className="text-xl text-gray-700 leading-relaxed mb-8">
-              At Ace Level Up, we think that the cornerstone of opportunity is education. In order to make learning accessible and interesting for everyone, our platform provides a vast array of courses, tutorials, and interactive content, whether you're studying for tests, learning new skills, or looking for professional advice. 
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-8">
+                At Ace Level Up, we think that the cornerstone of opportunity is education. In order to make learning accessible and interesting for everyone, our platform provides a vast array of courses, tutorials, and interactive content, whether you're studying for tests, learning new skills, or looking for professional advice. 
               </p>
-              <p className="text-xl text-gray-700 leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
                 Through innovative teaching methods, cutting-edge curriculum, and personalized support, we empower individuals to reach their full potential and make meaningful contributions to their fields.
               </p>
             </motion.div>
           </div>
         </div>
       </section>
+      
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -334,13 +325,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Values Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={index}
@@ -360,10 +352,11 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Student Success Path Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Your Path to Success
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -451,13 +444,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Team Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Meet Our Leadership Team
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
@@ -470,7 +464,7 @@ function App() {
               >
                 <div className="h-64 relative">
                   <img
-                    src={member.image}
+                    src={member.image || "/placeholder.svg"}
                     alt={member.name}
                     className="w-full h-full object-cover"
                   />
@@ -502,10 +496,11 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Career Paths Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Career Paths
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -530,10 +525,11 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Company History Timeline */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Our Journey
           </h2>
           <div className="max-w-4xl mx-auto">
@@ -544,9 +540,9 @@ function App() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-                className="flex mb-8 items-center"
+                className="flex flex-col md:flex-row mb-8 items-center"
               >
-                <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'order-last pl-8'}`}>
+                <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:order-last md:pl-8'} mb-4 md:mb-0`}>
                   <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
                   <p className="text-gray-600 mt-2">{item.description}</p>
                 </div>
@@ -556,7 +552,7 @@ function App() {
                   </div>
                   <div className="h-full w-0.5 bg-violet-600"></div>
                 </div>
-                <div className={`w-1/2 ${index % 2 === 0 ? 'order-last pl-8' : 'pr-8 text-right'}`}>
+                <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:order-last md:pl-8' : 'md:pr-8 md:text-right'} mt-4 md:mt-0`}>
                   <h3 className="text-2xl font-bold text-violet-600">{item.year}</h3>
                 </div>
               </motion.div>
@@ -564,13 +560,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Learning Process Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Our Learning Process
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <ProcessCard
               icon={Brain}
               step="1"
@@ -598,13 +595,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Partners & Clients Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Our Partners & Clients
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
             {partners.map((partner, index) => (
               <motion.div
                 key={index}
@@ -615,7 +613,7 @@ function App() {
                 className="flex items-center justify-center p-4"
               >
                 <img
-                  src={partner.logo}
+                  src={partner.logo || "/placeholder.svg"}
                   alt={partner.name}
                   className="max-h-16 w-auto grayscale hover:grayscale-0 transition-all duration-300"
                 />
@@ -629,13 +627,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Features Grid */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             What Sets Us Apart
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard
               icon={<Calendar className="w-8 h-8 text-violet-600" />}
               title="Flexible Schedule"
@@ -669,14 +668,15 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Student Success Stories
           </h2>
           <div className="max-w-4xl mx-auto">
-            <div className="relative h-[250px]">
+            <div className="relative h-[300px] sm:h-[250px]">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
@@ -690,14 +690,14 @@ function App() {
                     activeTestimonial === index ? "block" : "hidden"
                   }`}
                 >
-                  <div className="bg-gray-50 p-8 rounded-2xl shadow-lg">
-                    <div className="flex items-center mb-6">
+                  <div className="bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <div className="flex flex-col sm:flex-row sm:items-center mb-6">
                       <img
-                        src={testimonial.image}
+                        src={testimonial.image || "/placeholder.svg"}
                         alt={testimonial.name}
-                        className="w-16 h-16 rounded-full"
+                        className="w-16 h-16 rounded-full mx-auto sm:mx-0 mb-4 sm:mb-0"
                       />
-                      <div className="ml-4">
+                      <div className="sm:ml-4 text-center sm:text-left">
                         <h3 className="text-xl font-semibold">{testimonial.name}</h3>
                         <p className="text-gray-600">{testimonial.role}</p>
                       </div>
@@ -721,10 +721,11 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Frequently Asked Questions
           </h2>
           <div className="max-w-3xl mx-auto">
@@ -764,13 +765,14 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* Global Presence */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 sm:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
             Our Global Presence
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -826,25 +828,27 @@ function App() {
           </div>
         </div>
       </section>
+      
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-violet-600 to-indigo-600">
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-violet-600 to-indigo-600">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-white mb-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8">
             Ready to Take the Next Step?
           </h2>
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             Join thousands of successful professionals who have transformed their careers with AceLevelUp.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="px-8 py-4 bg-white text-violet-600 font-bold text-lg rounded-lg hover:bg-gray-100 transition-colors duration-300">
+            <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-violet-600 font-bold text-lg rounded-lg hover:bg-gray-100 transition-colors duration-300">
               Start Learning Now
             </button>
-            <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white/10 transition-colors duration-300">
+            <button className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white/10 transition-colors duration-300">
               Schedule a Demo
             </button>
           </div>
         </div>
       </section>
+      
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-10 px-6">
         <div className="max-w-7xl mx-auto">
@@ -915,6 +919,7 @@ function App() {
     </div>
   );
 }
+
 function FeatureCard({ icon, title, description }) {
   return (
     <motion.div
