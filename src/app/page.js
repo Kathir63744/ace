@@ -143,22 +143,22 @@ export default function Navbar() {
   ]
   const testimonials = [
     {
-      name: "Rajya Vardhan Mishra",
+      name: "Instructor 1",
       title: "How I got into Google India",
-      img: "/video1.avif",
+      img: "/coursevideo.png",
       videoLink:
-        "https://www.youtube.com/watch?v=NgqNA1I1IFg&pp=ygUuaG93IGkgZ290IGEgam9iIGF0IGdvb2dsZSByYWp5YSB2YXJkaGFuIG1pc2hyYQ%3D%3D",
+        "https://youtu.be/o21LkcxuLx8?si=zTWU9oq6i1uI3IsF",
     },
     {
-      name: "Sanjog Jadhav",
+      name: "Instructor 2",
       title: "How I got into AWS",
-      img: "/video2.avif",
-      videoLink: "https://www.youtube.com/watch?v=Of_3aS0yZXE&pp=ygUhaG93IGkgZ290IGEgam9iIGF3cyBzYW5qb2cgamFkaGF2",
+      img: "/coursevideo1.png",
+      videoLink: "https://youtu.be/j3DsRK0IBfs?si=wQxFBqbqFBboc3nJ",
     },
     {
-      name: "Sushil Hiremath",
+      name: "Instructor 3",
       title: "How I got a 2X hike",
-      img: "/video3.avif",
+      img: "/coursevideo2.png",
       videoLink: "https://www.youtube.com/watch?v=0vUNlnqIJ0w&pp=ygUhaG93IGkgZ290IDJ4IGhpa2Ugc3VzaGlsIGhpcmVtYXRo",
     },
   ]
@@ -337,22 +337,13 @@ export default function Navbar() {
                 17,000+ tech professionals trained
               </li>
             </ul>
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 rounded-lg p-3 sm:p-4 mb-6 sm:mb-10">
+            <div className=" border-l-4 border-orange-500 rounded-lg p-3 sm:p-4 mb-6 sm:mb-10">
               <p className="text-gray-800 text-sm sm:text-base">
                 <span className="font-semibold">Best suitable for:</span> Software Professionals with{" "}
                 <span className="font-semibold text-orange-600">5+ years</span> of experience.
               </p>
             </div>
-            <button
-              onClick={() => setShowModal(true)}
-              className="group w-full lg:w-auto px-6 py-3 sm:px-10 sm:py-4 bg-violet-600 text-white font-semibold rounded-lg sm:rounded-xl 
-                        hover:bg-violet-700 transition-all duration-300
-                        border border-violet-500/30 mb-6 sm:mb-8 shadow-lg hover:shadow-violet-500/20
-                        flex items-center justify-center text-sm sm:text-base"
-            >
-              Register for our FREE webinar
-              <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
+          
             {showModal && (
               <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
                 <WebinarForm closeModal={() => setShowModal(false)} />
@@ -379,6 +370,16 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="group w-full lg:w-auto px-6 py-3 sm:px-10 sm:py-4 bg-violet-600 text-white font-semibold rounded-lg sm:rounded-xl 
+                        hover:bg-violet-700 transition-all duration-300 mt-10
+                        border border-violet-500/30 mb-6 sm:mb-8 shadow-lg hover:shadow-violet-500/20
+                        flex  text-sm sm:text-base"
+            >
+              Register for our FREE webinar
+              <FaArrowRight className="ml-5 mt-1 group-hover:translate-x-1  transition-transform" />
+            </button>
           </div>
           
           {/* Right Section */}
@@ -606,28 +607,33 @@ export default function Navbar() {
 
         {/* Trusted Companies Section */}
         <div className="bg-white py-8 sm:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24">
-          <div className="text-center text-gray-600 mb-6 sm:mb-8">
-            <p className="text-sm sm:text-base md:text-lg font-medium">
-              Trusted by over 16,000 companies and millions of learners around the world
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-4 sm:mt-6">
-              <div className="grayscale hover:grayscale-0 transition-all duration-300">
-                <Image src="/vk.png" alt="VW" width={60} height={30} className="w-12 sm:w-16" />
-              </div>
-              <div className="grayscale hover:grayscale-0 transition-all duration-300">
-                <Image src="/Samsung.png" alt="Samsung" width={80} height={40} className="w-16 sm:w-20" />
-              </div>
-              <div className="grayscale hover:grayscale-0 transition-all duration-300">
-                <Image src="/visa.png" alt="visa" width={80} height={40} className="w-16 sm:w-20" />
-              </div>
-              <div className="grayscale hover:grayscale-0 transition-all duration-300">
-                <Image src="/vimeo.webp" alt="Vimeo" width={60} height={30} className="w-12 sm:w-16" />
-              </div>
-              <div className="grayscale hover:grayscale-0 transition-all duration-300">
-                <Image src="/card.png" alt="P&G" width={60} height={30} className="w-12 sm:w-16" />
-              </div>
-            </div>
+        <div className="bg-white-900 py-12 px-6 sm:px-8 border-t border-b border-gray-800">
+  <div className="max-w-7xl mx-auto text-center">
+    <p className="text-sm font-mono text-black-400 mb-4 tracking-widest">TRUSTED BY THE BEST</p>
+    <h3 className="text-2xl sm:text-3xl font-bold text-black mb-10">
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-cyan-400">
+        16,000+
+      </span> companies worldwide
+    </h3>
+    
+    <div className="flex flex-wrap justify-center gap-8 sm:gap-12">
+      {['/vk.png', '/Samsung.png', '/visa.png', '/vimeo.webp', '/card.png'].map((logo, index) => (
+        <div key={index} className="relative group">
+          <div className="absolute inset-0 bg-cyan-400 rounded-lg opacity-0 group-hover:opacity-10 blur-sm transition-all duration-500"></div>
+          <div className="relative w-24 h-16 sm:w-28 sm:h-20 flex items-center justify-center p-2">
+            <Image 
+              src={logo} 
+              alt="Partner logo" 
+              width={120} 
+              height={80}
+              className="object-contain w-full h-full grayscale brightness-200 contrast-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-300"
+            />
           </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
           
           {/* Course Carousel */}
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Learner is viewing</h2>
