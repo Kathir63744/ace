@@ -1,9 +1,8 @@
 "use client"
-import { useEffect, useState, useRef, useCallback } from "react"
-import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { cn } from "../../../lib/utils";
 import {
   BookOpen,
   Users,
@@ -36,9 +35,12 @@ import {
   Heart,
   Clock,
   Sparkles,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+} from "lucide-react";
 
+// Utility function for conditional class names
+
+
+// Mock navigation links data
 const navLinks = [
   { name: "About", path: "/about" },
   { name: "Course", path: "/courses" },
@@ -46,9 +48,9 @@ const navLinks = [
   { name: "Event", path: "/event" },
   { name: "Pricing", path: "/pricing" },
   { name: "Contact", path: "/contact" },
-]
+];
 
-// Enhanced course data with more details
+// Course data with detailed information for each course type
 const courseData = {
   "website-development": {
     title: "FullStack Development",
@@ -1076,62 +1078,70 @@ const courseData = {
       ],
     },
   },
-}
+};
 
+// Course options for the dropdown selector
 const courseOptions = [
-  { value: "FullStack Development", label: "website-development" },
+  { value: "website-development", label: "FullStack Development" },
   { value: "digital-marketing", label: "Digital Marketing" },
   { value: "app-development", label: "Mobile App Development" },
   { value: "scrum-master", label: "Scrum Master Certification" },
   { value: "ai-cybersecurity", label: "AI and Cybersecurity" },
   { value: "product-management", label: "Product Management" },
-]
+];
 
+// Features displayed on the overview section
 const features = [
   {
-    icon: <BookOpen className="w-6 h-6" />,
+    icon: <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "Industry-Proven Curriculum",
     description: "Content designed with hiring managers at top tech companies",
   },
   {
-    icon: <Users className="w-6 h-6" />,
+    icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "1:1 Mentorship",
     description: "Weekly sessions with senior developers",
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
+    icon: <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "Job Guarantee",
     description: "Get hired within 6 months or your money back",
   },
   {
-    icon: <Award className="w-6 h-6" />,
+    icon: <Award className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "Certification",
     description: "Recognized by 500+ employers worldwide",
   },
   {
-    icon: <BarChart2 className="w-6 h-6" />,
+    icon: <BarChart2 className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "Career Services",
     description: "Resume reviews, mock interviews, and salary negotiation",
   },
   {
-    icon: <Briefcase className="w-6 h-6" />,
+    icon: <Briefcase className="w-5 h-5 sm:w-6 sm:h-6" />,
     title: "Portfolio Projects",
     description: "Build 10+ apps for your professional portfolio",
   },
-]
+];
+
+// Animation component for fading in elements when they're visible in viewport
 const FadeInWhenVisible = ({ children, delay = 0, direction = "up", duration = 0.6 }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
-  let initialY = 0
-  let initialX = 0
-  let initialScale = 1
-  if (direction === "up") initialY = 50
-  if (direction === "down") initialY = -50
-  if (direction === "left") initialX = 50
-  if (direction === "right") initialX = -50
-  if (direction === "scale") initialScale = 0.9
+  });
+  
+  // Set initial animation position based on direction
+  let initialY = 0;
+  let initialX = 0;
+  let initialScale = 1;
+  
+  if (direction === "up") initialY = 50;
+  if (direction === "down") initialY = -50;
+  if (direction === "left") initialX = 50;
+  if (direction === "right") initialX = -50;
+  if (direction === "scale") initialScale = 0.9;
+  
   return (
     <motion.div
       ref={ref}
@@ -1164,14 +1174,17 @@ const FadeInWhenVisible = ({ children, delay = 0, direction = "up", duration = 0
     >
       {children}
     </motion.div>
-  )
-}
+  );
+};
+
+// Accordion component for displaying weekly curriculum
 const AccordionItem = ({ week, topic, hours, details, index }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
+  
   return (
     <motion.div
       ref={ref}
@@ -1183,7 +1196,7 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex justify-between items-center w-full p-6 text-left rounded-lg transition-all duration-300",
+          "flex justify-between items-center w-full p-4 sm:p-6 text-left rounded-lg transition-all duration-300",
           isOpen
             ? "bg-indigo-50 border border-indigo-100 shadow-md"
             : "bg-white hover:bg-gray-50 border border-gray-100 hover:shadow-sm",
@@ -1193,18 +1206,22 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
       >
         <div className="flex items-center">
           <motion.div
-            className="w-12 h-12 flex items-center justify-center bg-indigo-100 rounded-full mr-4"
+            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-100 rounded-full mr-3 sm:mr-4 flex-shrink-0"
             animate={{ rotate: isOpen ? 360 : 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-indigo-600 font-bold">{week}</span>
+            <span className="text-sm sm:text-base text-indigo-600 font-bold">{week}</span>
           </motion.div>
           <div>
-            <h3 className="text-lg font-semibold">{topic}</h3>
-            <p className="text-gray-600">{hours} hours</p>
+            <h3 className="text-base sm:text-lg font-semibold">{topic}</h3>
+            <p className="text-sm sm:text-base text-gray-600">{hours} hours</p>
           </div>
         </div>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+        <motion.div 
+          animate={{ rotate: isOpen ? 180 : 0 }} 
+          transition={{ duration: 0.3 }}
+          className="flex-shrink-0 ml-2"
+        >
           {isOpen ? (
             <ChevronUp className="w-5 h-5 text-indigo-600" />
           ) : (
@@ -1221,7 +1238,7 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="bg-white border border-t-0 border-gray-200 rounded-b-lg"
           >
-            <div className="p-6 pt-2">
+            <div className="p-4 sm:p-6 pt-2">
               <ul className="space-y-3">
                 {details.map((detail, i) => (
                   <motion.li
@@ -1231,8 +1248,8 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1, duration: 0.3 }}
                   >
-                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                    <span>{detail}</span>
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">{detail}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -1241,10 +1258,12 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
         )}
       </AnimatePresence>
     </motion.div>
-  )
-}
+  );
+};
+
+// Modal component for displaying video
 const VideoModal = ({ isOpen, onClose, videoSrc }) => {
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <motion.div
@@ -1266,65 +1285,67 @@ const VideoModal = ({ isOpen, onClose, videoSrc }) => {
           onClick={onClose}
           className="absolute top-4 right-4 z-10 p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
         <video src={videoSrc} className="w-full aspect-video" controls autoPlay />
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};
+
+// Countdown timer component for creating urgency
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 3,
     hours: 12,
     minutes: 45,
     seconds: 0,
-  })
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        let { days, hours, minutes, seconds } = prev
+        let { days, hours, minutes, seconds } = prev;
 
         if (seconds > 0) {
-          seconds -= 1
+          seconds -= 1;
         } else {
-          seconds = 59
+          seconds = 59;
           if (minutes > 0) {
-            minutes -= 1
+            minutes -= 1;
           } else {
-            minutes = 59
+            minutes = 59;
             if (hours > 0) {
-              hours -= 1
+              hours -= 1;
             } else {
-              hours = 23
+              hours = 23;
               if (days > 0) {
-                days -= 1
+                days -= 1;
               }
             }
           }
         }
 
-        return { days, hours, minutes, seconds }
-      })
-    }, 1000)
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="flex justify-center space-x-4 my-8">
+    <div className="flex justify-center space-x-2 sm:space-x-4 my-6 sm:my-8">
       {Object.entries(timeLeft).map(([unit, value]) => (
         <div key={unit} className="flex flex-col items-center">
-          <div className="bg-white w-16 h-16 md:w-20 md:h-20 rounded-lg shadow-lg flex items-center justify-center">
-            <span className="text-2xl md:text-3xl font-bold text-indigo-600">{value.toString().padStart(2, "0")}</span>
+          <div className="bg-white w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg shadow-lg flex items-center justify-center">
+            <span className="text-lg sm:text-2xl md:text-3xl font-bold text-indigo-600">{value.toString().padStart(2, "0")}</span>
           </div>
           <span className="text-xs md:text-sm mt-2 text-gray-600 capitalize">{unit}</span>
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 // Enhanced testimonial card with animations
 const TestimonialCard = ({ testimonial, index }) => {
@@ -1334,21 +1355,21 @@ const TestimonialCard = ({ testimonial, index }) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.2, duration: 0.5 }}
       whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
-      className="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100"
+      className="bg-white p-6 sm:p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100"
     >
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-4 sm:mb-6">
         <motion.img
           whileHover={{ scale: 1.1 }}
           src={testimonial.image}
           alt={testimonial.name}
-          className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-indigo-100"
+          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover mr-4 border-2 border-indigo-100"
         />
         <div>
-          <h4 className="text-xl font-semibold">{testimonial.name}</h4>
-          <p className="text-indigo-600">{testimonial.role}</p>
+          <h4 className="text-lg sm:text-xl font-semibold">{testimonial.name}</h4>
+          <p className="text-sm sm:text-base text-indigo-600">{testimonial.role}</p>
         </div>
       </div>
-      <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
+      <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6 italic">"{testimonial.content}"</p>
       <div className="flex">
         {[...Array(testimonial.rating)].map((_, i) => (
           <motion.div
@@ -1357,13 +1378,13 @@ const TestimonialCard = ({ testimonial, index }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 + i * 0.1 }}
           >
-            <Star className="w-5 h-5 text-yellow-400 fill-current" />
+            <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-current" />
           </motion.div>
         ))}
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
 // Mobile navigation component
 const MobileNav = ({ isOpen, onClose, activeSection }) => {
@@ -1378,17 +1399,17 @@ const MobileNav = ({ isOpen, onClose, activeSection }) => {
           className="fixed inset-0 z-50 bg-white"
         >
           <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-6 border-b">
+            <div className="flex justify-between items-center p-4 sm:p-6 border-b">
               <div className="flex items-center space-x-2">
-                <GraduationCap className="w-8 h-8 text-indigo-600" />
-                <h1 className="text-xl font-bold">Course Registration</h1>
+                <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" />
+                <h1 className="text-lg sm:text-xl font-bold">Course Registration</h1>
               </div>
               <button onClick={onClose} className="p-2">
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
-            <div className="flex-1 overflow-auto p-6">
-              <nav className="space-y-6">
+            <div className="flex-1 overflow-auto p-4 sm:p-6">
+              <nav className="space-y-4 sm:space-y-6">
                 {["overview", "curriculum", "outcomes", "testimonials", "pricing", "registration"].map(
                   (section, index) => (
                     <a
@@ -1396,7 +1417,7 @@ const MobileNav = ({ isOpen, onClose, activeSection }) => {
                       href={`#${section}`}
                       onClick={onClose}
                       className={cn(
-                        "block text-xl capitalize py-3 px-4 rounded-lg transition-colors",
+                        "block text-base sm:text-xl capitalize py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition-colors",
                         activeSection === index ? "bg-indigo-50 text-indigo-600 font-medium" : "hover:bg-gray-50",
                       )}
                     >
@@ -1410,37 +1431,38 @@ const MobileNav = ({ isOpen, onClose, activeSection }) => {
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default function CourseRegistration() {
-  const router = useRouter()
+// Main component
+const CourseRegistration = () => {
   // Use local storage to persist the selected course
   const [selectedCourseType, setSelectedCourseType] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("selectedCourse")
-      return saved ? JSON.parse(saved) : "website-development"
+      const saved = localStorage.getItem("selectedCourse");
+      return saved ? JSON.parse(saved) : "";
     }
-    return "website-development"
-  })
-
-  const [showForm, setShowForm] = useState(false)
+    return "";
+  });
+  
+  const [showForm, setShowForm] = useState(false);
+  
   // Update localStorage when course changes
   const updateSelectedCourse = (courseType) => {
-    setSelectedCourseType(courseType)
+    setSelectedCourseType(courseType);
     if (typeof window !== "undefined") {
-      localStorage.setItem("selectedCourse", JSON.stringify(courseType))
+      localStorage.setItem("selectedCourse", JSON.stringify(courseType));
     }
-  }
+  };
 
-  const course = courseData[selectedCourseType] || courseData["website-development"]
+  const course = courseData[selectedCourseType] || courseData[""];
 
   useEffect(() => {
-    const storedCourse = localStorage.getItem("selectedcourseid")
+    const storedCourse = localStorage.getItem("selectedcourseid");
     if (storedCourse) {
-      updateSelectedCourse(JSON.parse(storedCourse))
+      updateSelectedCourse(JSON.parse(storedCourse));
     }
-  }, [])
+  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1449,91 +1471,97 @@ export default function CourseRegistration() {
     message: "",
     course: selectedCourseType,
     resume: null,
-  })
+  });
 
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [activeSection, setActiveSection] = useState(0)
-  const [selectedPlan, setSelectedPlan] = useState(0)
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
-  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeSection, setActiveSection] = useState(0);
+  const [selectedPlan, setSelectedPlan] = useState(0);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
-  })
+  });
 
   // Parallax effect for hero section
-  const heroRef = useRef(null)
-  const [heroParallax, setHeroParallax] = useState({ y: 0 })
+  const heroRef = useRef(null);
+  const [heroParallax, setHeroParallax] = useState({ y: 0 });
 
   // Update form data when course changes
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
       course: selectedCourseType,
-    }))
-  }, [selectedCourseType])
+    }));
+  }, [selectedCourseType]);
 
-  // Handle scroll events for section detection and parallax
+  // Handle scroll events for section detection, parallax, and navbar change
   useEffect(() => {
     const handleScroll = () => {
+      // Check if page is scrolled for navbar styling
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+      
       // Section detection
-      const sections = document.querySelectorAll("section")
+      const sections = document.querySelectorAll("section");
       sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect()
+        const rect = section.getBoundingClientRect();
         if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-          setActiveSection(index)
+          setActiveSection(index);
         }
-      })
+      });
 
       // Parallax effect for hero
       if (heroRef.current) {
-        const scrollY = window.scrollY
-        setHeroParallax({ y: scrollY * 0.4 })
+        const scrollY = window.scrollY;
+        setHeroParallax({ y: scrollY * 0.4 });
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you would send this data to your backend
-    console.log("Form submitted:", formData)
-    setIsSubmitted(true)
+    console.log("Form submitted:", formData);
+    setIsSubmitted(true);
 
     // Scroll to the top of the form section with animation
     document.getElementById("registration")?.scrollIntoView({
       behavior: "smooth",
       block: "start",
-    })
-  }
+    });
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
-    }).format(price)
-  }
+    }).format(price);
+  };
 
   const toggleMobileMenu = useCallback(() => {
-    setMobileMenuOpen((prev) => !prev)
-  }, [])
-
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    setMobileMenuOpen((prev) => !prev);
+  }, []);
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${course.bgGradient}`}>
@@ -1554,13 +1582,13 @@ export default function CourseRegistration() {
         )}
       </AnimatePresence>
 
-      {/* Floating CTA Button with pulse effect */}
-      <div className="fixed bottom-6 right-6 z-40">
+      {/* Floating CTA Button with pulse effect - visible on mobile only */}
+      <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40">
         <motion.a
           href="#registration"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`flex items-center justify-center px-6 py-3 bg-${course.accentColor} text-white font-medium rounded-full shadow-lg shadow-${course.accentColor}/50 relative`}
+          className={`flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-${course.accentColor} text-white font-medium rounded-full shadow-lg shadow-${course.accentColor}/50 relative text-sm sm:text-base`}
         >
           <motion.span
             className="absolute inset-0 rounded-full bg-cyan-600 opacity-70"
@@ -1574,48 +1602,53 @@ export default function CourseRegistration() {
               repeatType: "loop",
             }}
           />
-          <Rocket className="w-5 h-5 mr-2" />
+          <Rocket className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
           Enroll Now
         </motion.a>
       </div>
+      
+      {/* Main Header/Navigation */}
       <div className="relative">
         <nav
           className={cn(
-            "bg-white p-3 h-16 flex items-center fixed top-0 w-full shadow-md z-50 transition-all duration-300",
-            isScrolled && "shadow-lg h-14",
+            "bg-white p-2 sm:p-3 h-14 sm:h-16 flex items-center fixed top-0 w-full shadow-md z-50 transition-all duration-300",
+            isScrolled && "shadow-lg h-12 sm:h-14",
           )}
         >
           <div className="container mx-auto flex items-center justify-between">
-            <Link href="/" className="flex items-center">
-              <h1 className="font-bold text-black text-lg ml-3">AceLevelUp</h1>
-            </Link>
+            <a href="/" className="flex items-center">
+              <h1 className="font-bold text-black text-base sm:text-lg ml-2 sm:ml-3">AceLevelUp</h1>
+            </a>
+            
             {/* Mobile Menu Button */}
-            <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label="Toggle menu">
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <button className="md:hidden flex items-center p-1" onClick={toggleMobileMenu} aria-label="Toggle menu">
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
+            
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8 text-blue-950 mr-6">
+            <div className="hidden md:flex space-x-4 lg:space-x-8 text-blue-950 mr-6">
               {navLinks.map(({ name, path }) => (
                 <button
                   key={name}
-                  onClick={() => router.push(path)}
-                  className="relative overflow-hidden text-md-400 text-gray-900 font-bold hover:text-cyan-700 font-sans transition-colors"
+                  onClick={() => {/* Navigation logic */}}
+                  className="relative overflow-hidden text-sm lg:text-base text-gray-900 font-bold hover:text-cyan-700 font-sans transition-colors"
                 >
                   {name}
                 </button>
               ))}
             </div>
+            
             {/* Mobile Navigation (Dropdown) */}
             {mobileMenuOpen && (
-              <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg py-4 flex flex-col items-center space-y-4">
+              <div className="md:hidden absolute top-14 sm:top-16 left-0 w-full bg-white shadow-lg py-3 sm:py-4 flex flex-col items-center space-y-3 sm:space-y-4 z-50">
                 {navLinks.map(({ name, path }) => (
                   <button
                     key={name}
                     onClick={() => {
-                      router.push(path)
-                      setMobileMenuOpen(false) // Close mobile menu on navigation
+                      // Navigation logic
+                      setMobileMenuOpen(false); // Close mobile menu on navigation
                     }}
-                    className="text-gray-900 font-bold hover:text-black transition-colors"
+                    className="text-gray-900 font-bold hover:text-black transition-colors text-sm sm:text-base"
                   >
                     {name}
                   </button>
@@ -1627,7 +1660,7 @@ export default function CourseRegistration() {
       </div>
 
       {/* Course Selector Dropdown */}
-      <div className="fixed top-20 right-6 z-40">
+      <div className="fixed top-16 sm:top-20 right-4 sm:right-6 z-40">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1636,10 +1669,10 @@ export default function CourseRegistration() {
         >
           <button
             onClick={() => setIsCourseSelectorOpen(!isCourseSelectorOpen)}
-            className="flex items-center justify-between w-full bg-white rounded-lg shadow-lg p-3 text-left"
+            className="flex items-center justify-between w-full bg-white rounded-lg shadow-lg p-2 sm:p-3 text-left text-sm sm:text-base"
           >
             <span className="font-medium">Explore Courses</span>
-            <ChevronDown className={`w-5 h-5 transition-transform ${isCourseSelectorOpen ? "rotate-180" : ""}`} />
+            <ChevronDown className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${isCourseSelectorOpen ? "rotate-180" : ""}`} />
           </button>
 
           <AnimatePresence>
@@ -1648,17 +1681,17 @@ export default function CourseRegistration() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl overflow-hidden z-50"
+                className="absolute top-full left-0 right-0 mt-1 sm:mt-2 bg-white rounded-lg shadow-xl overflow-hidden z-50 max-h-[50vh] overflow-y-auto"
               >
                 {courseOptions.map((option) => (
                   <motion.button
                     key={option.value}
                     whileHover={{ backgroundColor: "#f3f4f6" }}
                     onClick={() => {
-                      updateSelectedCourse(option.value)
-                      setIsCourseSelectorOpen(false)
+                      updateSelectedCourse(option.value);
+                      setIsCourseSelectorOpen(false);
                     }}
-                    className={`w-full p-3 text-left ${selectedCourseType === option.value ? "bg-indigo-50 text-indigo-600" : ""}`}
+                    className={`w-full p-2 sm:p-3 text-left text-sm sm:text-base ${selectedCourseType === option.value ? "bg-indigo-50 text-indigo-600" : ""}`}
                   >
                     {option.label}
                   </motion.button>
@@ -1670,50 +1703,50 @@ export default function CourseRegistration() {
       </div>
 
       {/* Header */}
-      <header className={`sticky top-0 z-40 bg-gradient-to-r ${course.headerBg} text-white shadow-lg`}>
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+      {/* <header className={`sticky top-0 z-40 bg-gradient-to-r ${course.headerBg} text-white shadow-lg mt-14 sm:mt-16`}>
+        <div className="container mx-auto px-3 sm:px-6 py-2 sm:py-4 flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-1 sm:space-x-2"
           >
-            <GraduationCap className="w-8 h-8" />
-            <h1 className="text-xl font-bold">{course.title}</h1>
+            <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
+            <h1 className="text-base sm:text-lg md:text-xl font-bold">{course.title}</h1>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden md:flex items-center space-x-6"
+            className="hidden md:flex items-center space-x-2 lg:space-x-6"
           >
-            <a href="#overview" className="hover:text-indigo-200 transition-colors">
+            <a href="#overview" className="hover:text-indigo-200 transition-colors text-xs lg:text-sm">
               Overview
             </a>
-            <a href="#curriculum" className="hover:text-indigo-200 transition-colors">
+            <a href="#curriculum" className="hover:text-indigo-200 transition-colors text-xs lg:text-sm">
               Curriculum
             </a>
-            <a href="#outcomes" className="hover:text-indigo-200 transition-colors">
+            <a href="#outcomes" className="hover:text-indigo-200 transition-colors text-xs lg:text-sm">
               Outcomes
             </a>
-            <a href="#pricing" className="hover:text-indigo-200 transition-colors">
+            <a href="#pricing" className="hover:text-indigo-200 transition-colors text-xs lg:text-sm">
               Pricing
             </a>
             <motion.a
               href="#registration"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-white text-cyan-600 rounded-lg font-medium"
+              className="px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 bg-white text-cyan-600 rounded-lg font-medium text-xs sm:text-sm"
             >
               Enroll Now
             </motion.a>
           </motion.div>
           <button className="md:hidden" onClick={() => setIsMobileNavOpen(true)}>
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           </button>
         </div>
-      </header>
+      </header> */}
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative w-full min-h-[80vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background with Parallax */}
         <div className="absolute inset-0 z-0">
           <motion.div style={{ y: heroParallax.y }} className="w-full h-full">
@@ -1724,7 +1757,7 @@ export default function CourseRegistration() {
           </motion.div>
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl px-6 py-20">
+        <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1735,7 +1768,7 @@ export default function CourseRegistration() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium mb-6"
+              className="inline-block px-3 py-1 sm:px-4 sm:py-1 md:px-6 md:py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium mb-3 sm:mb-4 md:mb-6 text-xs sm:text-sm md:text-base"
             >
               {course.subtitle}
             </motion.span>
@@ -1744,7 +1777,7 @@ export default function CourseRegistration() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 text-white leading-tight px-2"
             >
               Become a {course.title.split(" ")[0]} <br />
               <span className="text-indigo-300">in Just 12 Weeks</span>
@@ -1754,7 +1787,7 @@ export default function CourseRegistration() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="text-xl md:text-2xl text-indigo-100 mb-10 max-w-3xl mx-auto"
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-indigo-100 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto px-4"
             >
               {course.description}
             </motion.p>
@@ -1763,13 +1796,13 @@ export default function CourseRegistration() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-wrap justify-center gap-4"
+              className="flex flex-wrap justify-center gap-2 sm:gap-4"
             >
               <motion.a
                 href="#registration"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-cyan-600 hover:bg-gray-100 rounded-lg font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white text-cyan-600 hover:bg-gray-100 rounded-lg font-bold text-sm sm:text-base md:text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Enroll Now - {formatPrice(course.pricing.currentPrice)}
               </motion.a>
@@ -1778,58 +1811,57 @@ export default function CourseRegistration() {
                 onClick={() => setIsVideoModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-lg font-bold text-lg transition-all duration-300 flex items-center"
+                className="px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-lg font-bold text-sm sm:text-base md:text-lg transition-all duration-300 flex items-center"
               >
-                <Play className="w-5 h-5 mr-2" />
+                <Play className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
                 Watch Demo
               </motion.button>
             </motion.div>
           </motion.div>
         </div>
-
         {/* Stats Bar */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
-          className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm py-4 border-t border-white/20"
+          className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm py-3 sm:py-4 border-t border-white/20"
         >
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <motion.div className="p-2" whileHover={{ y: -5 }}>
-                <div className="text-3xl font-bold text-white">500+</div>
-                <div className="text-indigo-200">Hours of Content</div>
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-center">
+              <motion.div className="p-1 sm:p-2" whileHover={{ y: -5 }}>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">500+</div>
+                <div className="text-xs sm:text-sm md:text-base text-indigo-200">Hours of Content</div>
               </motion.div>
-              <motion.div className="p-2" whileHover={{ y: -5 }}>
-                <div className="text-3xl font-bold text-white">10+</div>
-                <div className="text-indigo-200">Real Projects</div>
+              <motion.div className="p-1 sm:p-2" whileHover={{ y: -5 }}>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">10+</div>
+                <div className="text-xs sm:text-sm md:text-base text-indigo-200">Real Projects</div>
               </motion.div>
-              <motion.div className="p-2" whileHover={{ y: -5 }}>
-                <div className="text-3xl font-bold text-white">94%</div>
-                <div className="text-indigo-200">Job Placement</div>
+              <motion.div className="p-1 sm:p-2" whileHover={{ y: -5 }}>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">94%</div>
+                <div className="text-xs sm:text-sm md:text-base text-indigo-200">Job Placement</div>
               </motion.div>
-              <motion.div className="p-2" whileHover={{ y: -5 }}>
-                <div className="text-3xl font-bold text-white">1:1</div>
-                <div className="text-indigo-200">Mentorship</div>
+              <motion.div className="p-1 sm:p-2" whileHover={{ y: -5 }}>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">1:1</div>
+                <div className="text-xs sm:text-sm md:text-base text-indigo-200">Mentorship</div>
               </motion.div>
             </div>
           </div>
         </motion.div>
       </section>
-
+      
       {/* Course Highlights */}
-      <section id="overview" className="py-20 px-6 bg-white">
+      <section id="overview" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why This {course.title} Course Stands Out</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Why This {course.title} Course Stands Out</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
                 We've designed this program to give you everything you need to succeed in today's competitive job market
               </p>
             </FadeInWhenVisible>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {features.map((feature, index) => (
               <FadeInWhenVisible key={index} delay={index * 0.1}>
                 <motion.div
@@ -1837,30 +1869,30 @@ export default function CourseRegistration() {
                     y: -10,
                     boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                   }}
-                  className="bg-white p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 h-full"
+                  className="bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-lg transition-all duration-300 border border-gray-100 h-full"
                 >
                   <motion.div
-                    className="w-14 h-14 flex items-center justify-center bg-indigo-100 rounded-full mb-6"
+                    className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center bg-indigo-100 rounded-full mb-4 sm:mb-6"
                     whileHover={{ rotate: 5, scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     {feature.icon}
                   </motion.div>
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-2 sm:mb-3">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
                 </motion.div>
               </FadeInWhenVisible>
             ))}
           </div>
-
+          
           {/* Course highlights */}
-          <div className="mt-20">
+          <div className="mt-12 sm:mt-16 md:mt-20">
             <FadeInWhenVisible>
-              <div className="bg-indigo-50 rounded-2xl p-8 md:p-12">
-                <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">What You'll Get</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-indigo-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">What You'll Get</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   <div>
-                    <ul className="space-y-6">
+                    <ul className="space-y-4 sm:space-y-6">
                       {course.highlights.slice(0, Math.ceil(course.highlights.length / 2)).map((highlight, index) => (
                         <motion.li
                           key={index}
@@ -1869,16 +1901,16 @@ export default function CourseRegistration() {
                           transition={{ delay: index * 0.1 }}
                           className="flex items-start"
                         >
-                          <div className="bg-white rounded-full p-1 mr-4 shadow-md">
-                            <CheckCircle className="w-6 h-6 text-green-500" />
+                          <div className="bg-white rounded-full p-1 mr-3 sm:mr-4 shadow-md flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-green-500" />
                           </div>
-                          <span className="text-lg">{highlight}</span>
+                          <span className="text-sm sm:text-base md:text-lg">{highlight}</span>
                         </motion.li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <ul className="space-y-6">
+                    <ul className="space-y-4 sm:space-y-6">
                       {course.highlights.slice(Math.ceil(course.highlights.length / 2)).map((highlight, index) => (
                         <motion.li
                           key={index}
@@ -1887,10 +1919,10 @@ export default function CourseRegistration() {
                           transition={{ delay: index * 0.1 + 0.2 }}
                           className="flex items-start"
                         >
-                          <div className="bg-white rounded-full p-1 mr-4 shadow-md">
-                            <CheckCircle className="w-6 h-6 text-green-500" />
+                          <div className="bg-white rounded-full p-1 mr-3 sm:mr-4 shadow-md flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-green-500" />
                           </div>
-                          <span className="text-lg">{highlight}</span>
+                          <span className="text-sm sm:text-base md:text-lg">{highlight}</span>
                         </motion.li>
                       ))}
                     </ul>
@@ -1903,12 +1935,12 @@ export default function CourseRegistration() {
       </section>
 
       {/* Curriculum Section */}
-      <section id="curriculum" className="py-20 px-6 bg-gray-50">
+      <section id="curriculum" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Comprehensive Curriculum</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Comprehensive Curriculum</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
                 Our {course.schedule.length}-week program covers everything from fundamentals to advanced concepts
               </p>
             </FadeInWhenVisible>
@@ -1929,9 +1961,9 @@ export default function CourseRegistration() {
 
           {/* Requirements */}
           <FadeInWhenVisible delay={0.3}>
-            <div className="mt-16 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Course Requirements</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mt-10 sm:mt-16 bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Course Requirements</h3>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {course.requirements.map((req, index) => (
                   <motion.li
                     key={index}
@@ -1940,8 +1972,8 @@ export default function CourseRegistration() {
                     transition={{ delay: index * 0.1 }}
                     className="flex items-start"
                   >
-                    <CheckCircle className="w-5 h-5 text-indigo-600 mt-0.5 mr-2 flex-shrink-0" />
-                    <span>{req}</span>
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 mt-0.5 mr-2 flex-shrink-0" />
+                    <span className="text-sm sm:text-base">{req}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -1951,26 +1983,26 @@ export default function CourseRegistration() {
       </section>
 
       {/* Learning Outcomes */}
-      <section id="outcomes" className="py-20 px-6 bg-white">
+      <section id="outcomes" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">What You'll Achieve</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">What You'll Achieve</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
                 By the end of this program, you'll have the skills and confidence to excel as a professional{" "}
                 {course.title.toLowerCase()} expert
               </p>
             </FadeInWhenVisible>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             <FadeInWhenVisible direction="left">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
-                  <Sparkles className="w-6 h-6 text-indigo-600 mr-2" />
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600 mr-2" />
                   Skills You'll Master
                 </h3>
-                <ul className="space-y-4">
+                <ul className="space-y-3 sm:space-y-4">
                   {course.skills.map((skill, index) => (
                     <motion.li
                       key={index}
@@ -1979,10 +2011,10 @@ export default function CourseRegistration() {
                       transition={{ delay: index * 0.1 }}
                       className="flex items-start"
                     >
-                      <div className="bg-indigo-100 rounded-full p-1 mr-3 flex-shrink-0">
-                        <CheckCircle className="w-5 h-5 text-indigo-600" />
+                      <div className="bg-indigo-100 rounded-full p-1 mr-2 sm:mr-3 flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
                       </div>
-                      <span className="text-lg">{skill}</span>
+                      <span className="text-sm sm:text-base md:text-lg">{skill}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -1991,11 +2023,11 @@ export default function CourseRegistration() {
 
             <FadeInWhenVisible direction="right">
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
-                  <Briefcase className="w-6 h-6 text-indigo-600 mr-2" />
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                  <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600 mr-2" />
                   Career Outcomes
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {course.careers.map((career, index) => (
                     <motion.div
                       key={index}
@@ -2003,19 +2035,19 @@ export default function CourseRegistration() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
                       whileHover={{ y: -5 }}
-                      className="bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
+                      className="bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex items-start">
-                        <div className="w-12 h-12 flex items-center justify-center bg-indigo-100 rounded-full mr-4 flex-shrink-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-100 rounded-full mr-3 sm:mr-4 flex-shrink-0">
                           {career.icon}
                         </div>
                         <div>
-                          <h4 className="text-xl font-semibold">{career.title}</h4>
-                          <p className="text-indigo-600 font-medium mb-2">{career.salary}</p>
-                          <p className="text-gray-600">{career.description}</p>
-                          <div className="mt-3 flex flex-wrap gap-2">
+                          <h4 className="text-base sm:text-lg md:text-xl font-semibold">{career.title}</h4>
+                          <p className="text-indigo-600 font-medium mb-1 sm:mb-2 text-sm sm:text-base">{career.salary}</p>
+                          <p className="text-gray-600 text-sm sm:text-base">{career.description}</p>
+                          <div className="mt-2 sm:mt-3 flex flex-wrap gap-1 sm:gap-2">
                             {career.skills.map((skill, i) => (
-                              <span key={i} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                              <span key={i} className="px-2 sm:px-3 py-0.5 sm:py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs sm:text-sm">
                                 {skill}
                               </span>
                             ))}
@@ -2032,18 +2064,18 @@ export default function CourseRegistration() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-6 bg-gray-50">
+      <section id="testimonials" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Success Stories</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Success Stories</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
                 Hear from our graduates who transformed their careers
               </p>
             </FadeInWhenVisible>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {course.testimonials.map((testimonial, index) => (
               <TestimonialCard key={index} testimonial={testimonial} index={index} />
             ))}
@@ -2052,50 +2084,50 @@ export default function CourseRegistration() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-6 bg-white">
+      <section id="pricing" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Flexible Pricing Options</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">Choose the payment plan that works best for you</p>
-              <div className="mt-6 inline-block bg-indigo-50 px-4 py-2 rounded-full text-indigo-700">
-                <span className="line-through text-gray-500 mr-2">{formatPrice(course.pricing.fullPrice)}</span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Flexible Pricing Options</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">Choose the payment plan that works best for you</p>
+              <div className="mt-4 sm:mt-6 inline-block bg-indigo-50 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-indigo-700 text-sm sm:text-base">
+                <span className="line-through text-gray-500 mr-1 sm:mr-2">{formatPrice(course.pricing.fullPrice)}</span>
                 <span className="font-bold">{formatPrice(course.pricing.currentPrice)}</span>
-                <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                <span className="ml-1 sm:ml-2 bg-green-100 text-green-800 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium">
                   SAVE {formatPrice(course.pricing.fullPrice - course.pricing.currentPrice)}
                 </span>
               </div>
             </FadeInWhenVisible>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {course.pricing.paymentPlans.map((plan, index) => (
               <FadeInWhenVisible key={index} delay={index * 0.1}>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   onClick={() => setSelectedPlan(index)}
                   className={cn(
-                    "p-8 rounded-xl border-2 cursor-pointer transition-all duration-300",
+                    "p-4 sm:p-6 md:p-8 rounded-xl border-2 cursor-pointer transition-all duration-300",
                     selectedPlan === index
                       ? "border-cyan-600 bg-indigo-50 shadow-lg"
                       : "border-gray-200 hover:border-indigo-300",
                   )}
                 >
-                  <h3 className="text-2xl font-semibold mb-4">{plan.name}</h3>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4">{plan.name}</h3>
+                  <div className="mb-4 sm:mb-6">
+                    <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
                       {formatPrice(plan.price)}
-                      {plan.name !== "Pay in Full" && <span className="text-lg text-gray-500">/mo</span>}
+                      {plan.name !== "Pay in Full" && <span className="text-base sm:text-lg text-gray-500">/mo</span>}
                     </span>
                     {plan.savings && (
-                      <p className="text-green-600 mt-1 flex items-center">
-                        <Heart className="w-4 h-4 mr-1" />
+                      <p className="text-green-600 mt-1 flex items-center text-sm sm:text-base">
+                        <Heart className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         Save {formatPrice(plan.savings)}
                       </p>
                     )}
-                    {plan.total && <p className="text-gray-500 text-sm mt-1">Total: {formatPrice(plan.total)}</p>}
+                    {plan.total && <p className="text-gray-500 text-xs sm:text-sm mt-1">Total: {formatPrice(plan.total)}</p>}
                   </div>
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                     {plan.perks.map((perk, i) => (
                       <motion.li
                         key={i}
@@ -2106,11 +2138,11 @@ export default function CourseRegistration() {
                       >
                         <CheckCircle
                           className={cn(
-                            "w-5 h-5 mt-0.5 mr-2 flex-shrink-0",
+                            "w-4 h-4 sm:w-5 sm:h-5 mt-0.5 mr-2 flex-shrink-0",
                             selectedPlan === index ? "text-cyan-600" : "text-gray-400",
                           )}
                         />
-                        <span>{perk}</span>
+                        <span className="text-sm sm:text-base">{perk}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -2118,7 +2150,7 @@ export default function CourseRegistration() {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     className={cn(
-                      "w-full py-3 px-6 rounded-lg font-medium transition-colors",
+                      "w-full py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors text-sm sm:text-base",
                       selectedPlan === index
                         ? "bg-cyan-600 text-white hover:bg-cyan-700"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200",
@@ -2132,49 +2164,49 @@ export default function CourseRegistration() {
           </div>
 
           <FadeInWhenVisible delay={0.4}>
-            <div className="mt-12 bg-indigo-50 p-8 rounded-xl border border-indigo-100">
-              <h3 className="text-2xl font-semibold mb-4 text-center">What's Included</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="mt-8 sm:mt-12 bg-indigo-50 p-4 sm:p-6 md:p-8 rounded-xl border border-indigo-100">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-center">What's Included</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Lifetime Access</h4>
-                    <p className="text-gray-600 text-sm">All course materials and future updates</p>
+                    <h4 className="font-medium text-sm sm:text-base">Lifetime Access</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">All course materials and future updates</p>
                   </div>
                 </motion.div>
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Private Community</h4>
-                    <p className="text-gray-600 text-sm">Network with peers and instructors</p>
+                    <h4 className="font-medium text-sm sm:text-base">Private Community</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">Network with peers and instructors</p>
                   </div>
                 </motion.div>
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Certificate</h4>
-                    <p className="text-gray-600 text-sm">Verified credential for your LinkedIn</p>
+                    <h4 className="font-medium text-sm sm:text-base">Certificate</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">Verified credential for your LinkedIn</p>
                   </div>
                 </motion.div>
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Career Support</h4>
-                    <p className="text-gray-600 text-sm">Resume reviews and interview prep</p>
+                    <h4 className="font-medium text-sm sm:text-base">Career Support</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">Resume reviews and interview prep</p>
                   </div>
                 </motion.div>
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Project Feedback</h4>
-                    <p className="text-gray-600 text-sm">Personalized code reviews</p>
+                    <h4 className="font-medium text-sm sm:text-base">Project Feedback</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">Personalized code reviews</p>
                   </div>
                 </motion.div>
                 <motion.div className="flex items-start" whileHover={{ x: 5 }}>
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">Job Guarantee</h4>
-                    <p className="text-gray-600 text-sm">Get hired within 6 months or money back</p>
+                    <h4 className="font-medium text-sm sm:text-base">Job Guarantee</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm">Get hired within 6 months or money back</p>
                   </div>
                 </motion.div>
               </div>
@@ -2184,56 +2216,56 @@ export default function CourseRegistration() {
       </section>
 
       {/* Registration Form */}
-      <section id="registration" className="py-20 px-6 bg-gray-50">
+      <section id="registration" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Ready to Transform Your Career?</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Ready to Transform Your Career?</h2>
+              <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
                 Join our next cohort starting soon. Limited seats available.
               </p>
-              <div className="flex justify-center mt-6">
-                <div className="flex items-center bg-amber-100 text-amber-800 px-4 py-2 rounded-full">
-                  <Clock className="w-4 h-4 mr-2" />
+              <div className="flex justify-center mt-4 sm:mt-6">
+                <div className="flex items-center bg-amber-100 text-amber-800 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   <span className="font-medium">Only 8 spots left for this cohort</span>
                 </div>
               </div>
             </FadeInWhenVisible>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             {/* Form Section */}
             <FadeInWhenVisible direction="left">
               <motion.div
-                className="bg-white rounded-2xl shadow-xl p-8 h-fit border border-gray-100"
+                className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 h-fit border border-gray-100"
                 whileHover={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
               >
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Secure Your Spot</h2>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Secure Your Spot</h2>
 
                 {isSubmitted ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl text-center"
+                    className="bg-green-50 border border-green-200 text-green-700 p-4 sm:p-6 rounded-xl text-center"
                   >
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
                     >
-                      <CheckCircle className="w-16 h-16 mx-auto text-green-500 mb-4" />
+                      <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-green-500 mb-3 sm:mb-4" />
                     </motion.div>
-                    <h3 className="text-2xl font-bold mb-2">Registration Successful!</h3>
-                    <p className="text-lg mb-4">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-2">Registration Successful!</h3>
+                    <p className="text-base sm:text-lg mb-3 sm:mb-4">
                       Thank you for registering. We've sent a confirmation to {formData.email}.
                     </p>
-                    <p className="text-lg">Our admissions team will contact you within 24 hours with next steps.</p>
+                    <p className="text-base sm:text-lg">Our admissions team will contact you within 24 hours with next steps.</p>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                           Full Name *
                         </label>
                         <motion.input
@@ -2244,13 +2276,13 @@ export default function CourseRegistration() {
                           required
                           value={formData.name}
                           onChange={handleChange}
-                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-4 py-3 border"
+                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-3 py-2 sm:px-4 sm:py-3 border text-sm sm:text-base"
                           placeholder="John Doe"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                           Email Address *
                         </label>
                         <motion.input
@@ -2261,15 +2293,15 @@ export default function CourseRegistration() {
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-4 py-3 border"
+                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-3 py-2 sm:px-4 sm:py-3 border text-sm sm:text-base"
                           placeholder="john@example.com"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="mobile" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                           Mobile Number *
                         </label>
                         <motion.input
@@ -2280,13 +2312,13 @@ export default function CourseRegistration() {
                           required
                           value={formData.mobile}
                           onChange={handleChange}
-                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-4 py-3 border"
+                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-3 py-2 sm:px-4 sm:py-3 border text-sm sm:text-base"
                           placeholder="+1 (555) 000-0000"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="course" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="course" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                           Select Course *
                         </label>
                         <motion.select
@@ -2296,7 +2328,7 @@ export default function CourseRegistration() {
                           required
                           value={formData.course}
                           onChange={handleChange}
-                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-4 py-3 border"
+                          className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-3 py-2 sm:px-4 sm:py-3 border text-sm sm:text-base"
                         >
                           {courseOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -2308,7 +2340,7 @@ export default function CourseRegistration() {
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                         Tell Us About Your Goals
                       </label>
                       <motion.textarea
@@ -2318,7 +2350,7 @@ export default function CourseRegistration() {
                         rows={4}
                         value={formData.message}
                         onChange={handleChange}
-                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-4 py-3 border"
+                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 px-3 py-2 sm:px-4 sm:py-3 border text-sm sm:text-base"
                         placeholder="What do you hope to achieve with this course? Any specific areas you want to focus on?"
                       />
                     </div>
@@ -2332,7 +2364,7 @@ export default function CourseRegistration() {
                         required
                         className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 mt-1"
                       />
-                      <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+                      <label htmlFor="terms" className="ml-2 block text-xs sm:text-sm text-gray-700">
                         I agree to the{" "}
                         <a href="#" className="text-cyan-600 hover:text-cyan-500">
                           Terms of Service
@@ -2348,9 +2380,9 @@ export default function CourseRegistration() {
                       type="submit"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-colors duration-200"
+                      className="w-full flex justify-center items-center py-3 sm:py-4 px-4 sm:px-6 border border-transparent rounded-lg shadow-sm text-base sm:text-lg font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-colors duration-200"
                     >
-                      <Send className="w-5 h-5 mr-2" />
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
                       Submit Application
                     </motion.button>
                   </form>
@@ -2360,42 +2392,42 @@ export default function CourseRegistration() {
 
             {/* Benefits Section */}
             <FadeInWhenVisible direction="right">
-              <div className="space-y-8">
-                <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Why Enroll Now?</h3>
-                  <ul className="space-y-4">
+              <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                <div className="bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-gray-900">Why Enroll Now?</h3>
+                  <ul className="space-y-3 sm:space-y-4">
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
-                      <div className="bg-green-100 rounded-full p-1 mr-3 flex-shrink-0">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 rounded-full p-1 mr-2 sm:mr-3 flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                       </div>
-                      <div>
+                      <div className="text-sm sm:text-base">
                         <span className="font-medium">Early Bird Discount:</span> Save{" "}
                         {formatPrice(course.pricing.fullPrice - course.pricing.currentPrice)} when you enroll today
                       </div>
                     </motion.li>
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
-                      <div className="bg-green-100 rounded-full p-1 mr-3 flex-shrink-0">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 rounded-full p-1 mr-2 sm:mr-3 flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                       </div>
-                      <div>
+                      <div className="text-sm sm:text-base">
                         <span className="font-medium">Limited Seats:</span> Only 8 spots remaining for the upcoming
                         cohort
                       </div>
                     </motion.li>
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
-                      <div className="bg-green-100 rounded-full p-1 mr-3 flex-shrink-0">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 rounded-full p-1 mr-2 sm:mr-3 flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                       </div>
-                      <div>
+                      <div className="text-sm sm:text-base">
                         <span className="font-medium">Job Guarantee:</span> Get hired within 6 months or receive a full
                         refund
                       </div>
                     </motion.li>
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
-                      <div className="bg-green-100 rounded-full p-1 mr-3 flex-shrink-0">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 rounded-full p-1 mr-2 sm:mr-3 flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                       </div>
-                      <div>
+                      <div className="text-sm sm:text-base">
                         <span className="font-medium">Flexible Schedule:</span> Part-time and full-time options
                         available
                       </div>
@@ -2403,32 +2435,32 @@ export default function CourseRegistration() {
                   </ul>
                 </div>
 
-                <div className="bg-cyan-600 p-8 rounded-xl shadow-md text-white">
-                  <h3 className="text-2xl font-bold mb-4">Hear From Our Alumni</h3>
-                  <div className="space-y-6">
-                    <motion.div whileHover={{ scale: 1.02 }} className="bg-cyan-500/50 p-4 rounded-lg">
-                      <p className="italic mb-3">
+                <div className="bg-cyan-600 p-4 sm:p-6 md:p-8 rounded-xl shadow-md text-white">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Hear From Our Alumni</h3>
+                  <div className="space-y-4 sm:space-y-6">
+                    <motion.div whileHover={{ scale: 1.02 }} className="bg-cyan-500/50 p-3 sm:p-4 rounded-lg">
+                      <p className="italic mb-2 sm:mb-3 text-sm sm:text-base">
                         "This course was the best investment I've ever made in my career. I went from a junior position
                         to a senior role with a 45% salary increase."
                       </p>
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-cyan-200 mr-3"></div>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cyan-200 mr-2 sm:mr-3"></div>
                         <div>
-                          <p className="font-medium">Alex Johnson</p>
-                          <p className="text-cyan-200 text-sm">Senior Developer</p>
+                          <p className="font-medium text-sm sm:text-base">Alex Johnson</p>
+                          <p className="text-cyan-200 text-xs sm:text-sm">Senior Developer</p>
                         </div>
                       </div>
                     </motion.div>
-                    <motion.div whileHover={{ scale: 1.02 }} className="bg-cyan-500/50 p-4 rounded-lg">
-                      <p className="italic mb-3">
+                    <motion.div whileHover={{ scale: 1.02 }} className="bg-cyan-500/50 p-3 sm:p-4 rounded-lg">
+                      <p className="italic mb-2 sm:mb-3 text-sm sm:text-base">
                         "The hands-on projects and mentorship were invaluable. I landed a job at a top tech company just
                         2 weeks after completing the program."
                       </p>
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-cyan-200 mr-3"></div>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cyan-200 mr-2 sm:mr-3"></div>
                         <div>
-                          <p className="font-medium">Maria Garcia</p>
-                          <p className="text-cyan-200 text-sm">Product Engineer</p>
+                          <p className="font-medium text-sm sm:text-base">Maria Garcia</p>
+                          <p className="text-cyan-200 text-xs sm:text-sm">Product Engineer</p>
                         </div>
                       </div>
                     </motion.div>
@@ -2441,19 +2473,19 @@ export default function CourseRegistration() {
       </section>
 
       {/* Final CTA */}
-      <section className={`py-16 bg-gradient-to-r ${course.headerBg} text-white`}>
-        <div className="max-w-6xl mx-auto px-6 text-center">
+      <section className={`py-10 sm:py-12 md:py-16 bg-gradient-to-r ${course.headerBg} text-white`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your New Career?</h2>
-            <p className="text-xl max-w-3xl mx-auto mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 md:mb-6">Ready to Launch Your New Career?</h2>
+            <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-8">
               Join thousands of students who transformed their lives with our program
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <motion.a
                 href="#registration"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-cyan-600 hover:bg-gray-100 rounded-lg font-bold text-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+                className="px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-white text-cyan-600 hover:bg-gray-100 rounded-lg font-bold text-sm sm:text-base md:text-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
               >
                 Enroll Now
               </motion.a>
@@ -2461,9 +2493,9 @@ export default function CourseRegistration() {
                 href="#"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-lg font-bold text-lg transition-colors duration-300 flex items-center"
+                className="px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-lg font-bold text-sm sm:text-base md:text-lg transition-colors duration-300 flex items-center"
               >
-                <MessageSquare className="w-5 h-5 mr-2" />
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
                 Chat With Advisor
               </motion.a>
             </div>
@@ -2472,22 +2504,22 @@ export default function CourseRegistration() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <GraduationCap className="w-8 h-8" />
-                <h3 className="text-xl font-bold">AceLevelUp</h3>
+      <footer className="bg-gray-900 text-white py-8 sm:py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+                <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8" />
+                <h3 className="text-lg sm:text-xl font-bold">AceLevelUp</h3>
               </div>
-              <p className="text-gray-400">Transforming careers through expert-led tech education since 2025.</p>
+              <p className="text-gray-400 text-xs sm:text-sm">Transforming careers through expert-led tech education since 2025.</p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">Courses</h4>
-              <ul className="space-y-2">
-                {courseOptions.map((option) => (
+              <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Courses</h4>
+              <ul className="space-y-1 sm:space-y-2">
+                {courseOptions.slice(0, 3).map((option) => (
                   <li key={option.value}>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                       {option.label}
                     </a>
                   </li>
@@ -2495,66 +2527,56 @@ export default function CourseRegistration() {
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">Company</h4>
-              <ul className="space-y-2">
+              <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Company</h4>
+              <ul className="space-y-1 sm:space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    Press
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">Connect</h4>
-              <ul className="space-y-2">
+              <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Connect</h4>
+              <ul className="space-y-1 sm:space-y-2">
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     Contact Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     Twitter
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                     LinkedIn
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                    Instagram
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2025 AceLevelUp. All rights reserved.</p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+          <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-4 sm:pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-xs sm:text-sm">© 2025 AceLevelUp. All rights reserved.</p>
+            <div className="flex space-x-3 sm:space-x-4 mt-3 md:mt-0">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                 Privacy Policy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                 Terms of Service
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">
                 Cookie Policy
               </a>
             </div>
@@ -2562,6 +2584,7 @@ export default function CourseRegistration() {
         </div>
       </footer>
     </div>
-  )
-}
+  );
+};
 
+export default CourseRegistration;
