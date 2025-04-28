@@ -40,6 +40,7 @@ import {
 } from "lucide-react"
 import { cn } from "../../../lib/utils"
 
+// Define course data and other constants
 const navLinks = [
   { name: "About", path: "/about" },
   { name: "Course", path: "/courses" },
@@ -217,6 +218,7 @@ const courseData = {
       ],
     },
   },
+  // Other course data remains the same...
   "digital-marketing": {
     title: "Digital Marketing",
     subtitle: "Master Digital Marketing in 10 Weeks",
@@ -1121,6 +1123,7 @@ const features = [
   },
 ]
 
+// Component definitions
 const FadeInWhenVisible = ({ children, delay = 0, direction = "up", duration = 0.6 }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -1418,25 +1421,36 @@ const MobileNav = ({ isOpen, onClose, activeSection }) => {
   )
 }
 
+// Main component
 export default function CourseRegistration() {
   const router = useRouter()
-  // Use local storage to persist the selected course
+  // Default to a safe course type to prevent errors during SSR
   const [selectedCourseType, setSelectedCourseType] = useState("website-development")
-
   const [showForm, setShowForm] = useState(false)
-  // Update localStorage when course changes
+
+  // Update localStorage when course changes - safely
   const updateSelectedCourse = (courseType) => {
     setSelectedCourseType(courseType)
     if (typeof window !== "undefined") {
-      localStorage.setItem("selectedCourse", JSON.stringify(courseType))
+      try {
+        localStorage.setItem("selectedCourse", JSON.stringify(courseType))
+      } catch (error) {
+        console.error("Error saving to localStorage:", error)
+      }
     }
   }
 
-  // Default to website-development if the selected course doesn't exist
-  const course = courseData[selectedCourseType] || courseData["website-development"]
+  // Safely get the course object with fallbacks to prevent the build error
+  const getCourse = (courseId) => {
+    // Always return a valid course object, defaulting to website-development if needed
+    return courseData[courseId] || courseData["website-development"]
+  }
 
+  // Get the current course with fallback
+  const course = getCourse(selectedCourseType)
+
+  // Load saved course from localStorage only on client side
   useEffect(() => {
-    // Only run on client side
     if (typeof window !== "undefined") {
       try {
         const storedCourse = localStorage.getItem("selectedcourseid")
@@ -1580,7 +1594,7 @@ export default function CourseRegistration() {
           href="#registration"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`flex items-center justify-center px-6 py-3 bg-${course?.accentColor || "cyan-600"} text-white font-medium rounded-full shadow-lg shadow-${course?.accentColor || "cyan-600"}/50 relative`}
+          className="flex items-center justify-center px-6 py-3 bg-cyan-600 text-white font-medium rounded-full shadow-lg shadow-cyan-600/50 relative"
         >
           <motion.span
             className="absolute inset-0 rounded-full bg-cyan-600 opacity-70"
@@ -1611,7 +1625,6 @@ export default function CourseRegistration() {
             </Link>
             {/* Mobile Menu Button */}
             <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label="Toggle menu">
-              {mobileMenuOpen ? <X size={24} /> :  aria-label="Toggle menu">
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             {/* Desktop Navigation */}
@@ -1691,7 +1704,7 @@ export default function CourseRegistration() {
       </div>
 
       {/* Header */}
-      <header className={`sticky top-0 z-40 bg-gradient-to-r ${course?.headerBg || "from-blue-600 to-cyan-600"} text-white shadow-lg`}>
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -1882,38 +1895,42 @@ export default function CourseRegistration() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <ul className="space-y-6">
-                      {(course?.highlights || []).slice(0, Math.ceil((course?.highlights || []).length / 2)).map((highlight, index) => (
-                        <motion.li
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="flex items-start"
-                        >
-                          <div className="bg-white rounded-full p-1 mr-4 shadow-md">
-                            <CheckCircle className="w-6 h-6 text-green-500" />
-                          </div>
-                          <span className="text-lg">{highlight}</span>
-                        </motion.li>
-                      ))}
+                      {(course?.highlights || [])
+                        .slice(0, Math.ceil((course?.highlights || []).length / 2))
+                        .map((highlight, index) => (
+                          <motion.li
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="flex items-start"
+                          >
+                            <div className="bg-white rounded-full p-1 mr-4 shadow-md">
+                              <CheckCircle className="w-6 h-6 text-green-500" />
+                            </div>
+                            <span className="text-lg">{highlight}</span>
+                          </motion.li>
+                        ))}
                     </ul>
                   </div>
                   <div>
                     <ul className="space-y-6">
-                      {(course?.highlights || []).slice(Math.ceil((course?.highlights || []).length / 2)).map((highlight, index) => (
-                        <motion.li
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + 0.2 }}
-                          className="flex items-start"
-                        >
-                          <div className="bg-white rounded-full p-1 mr-4 shadow-md">
-                            <CheckCircle className="w-6 h-6 text-green-500" />
-                          </div>
-                          <span className="text-lg">{highlight}</span>
-                        </motion.li>
-                      ))}
+                      {(course?.highlights || [])
+                        .slice(Math.ceil((course?.highlights || []).length / 2))
+                        .map((highlight, index) => (
+                          <motion.li
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + 0.2 }}
+                            className="flex items-start"
+                          >
+                            <div className="bg-white rounded-full p-1 mr-4 shadow-md">
+                              <CheckCircle className="w-6 h-6 text-green-500" />
+                            </div>
+                            <span className="text-lg">{highlight}</span>
+                          </motion.li>
+                        ))}
                     </ul>
                   </div>
                 </div>
@@ -1930,7 +1947,8 @@ export default function CourseRegistration() {
             <FadeInWhenVisible>
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Comprehensive Curriculum</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our {course?.schedule?.length || 6}-week program covers everything from fundamentals to advanced concepts
+                Our {course?.schedule?.length || 6}-week program covers everything from fundamentals to advanced
+                concepts
               </p>
             </FadeInWhenVisible>
           </div>
@@ -2080,7 +2098,9 @@ export default function CourseRegistration() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Flexible Pricing Options</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">Choose the payment plan that works best for you</p>
               <div className="mt-6 inline-block bg-indigo-50 px-4 py-2 rounded-full text-indigo-700">
-                <span className="line-through text-gray-500 mr-2">{formatPrice(course?.pricing?.fullPrice || 2999)}</span>
+                <span className="line-through text-gray-500 mr-2">
+                  {formatPrice(course?.pricing?.fullPrice || 2999)}
+                </span>
                 <span className="font-bold">{formatPrice(course?.pricing?.currentPrice || 2499)}</span>
                 <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
                   SAVE {formatPrice((course?.pricing?.fullPrice || 2999) - (course?.pricing?.currentPrice || 2499))}
@@ -2391,7 +2411,8 @@ export default function CourseRegistration() {
                       </div>
                       <div>
                         <span className="font-medium">Early Bird Discount:</span> Save{" "}
-                        {formatPrice((course?.pricing?.fullPrice || 2999) - (course?.pricing?.currentPrice || 2499))} when you enroll today
+                        {formatPrice((course?.pricing?.fullPrice || 2999) - (course?.pricing?.currentPrice || 2499))}{" "}
+                        when you enroll today
                       </div>
                     </motion.li>
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
@@ -2462,7 +2483,7 @@ export default function CourseRegistration() {
       </section>
 
       {/* Final CTA */}
-      <section className={`py-16 bg-gradient-to-r ${course?.headerBg || "from-blue-600 to-cyan-600"} text-white`}>
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your New Career?</h2>
