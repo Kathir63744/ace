@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState, useRef, useCallback } from "react"
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
@@ -1079,7 +1080,7 @@ const courseData = {
 }
 
 const courseOptions = [
-  { value: "FullStack Development", label: "website-development" },
+  { value: "website-development", label: "FullStack Development" },
   { value: "digital-marketing", label: "Digital Marketing" },
   { value: "app-development", label: "Mobile App Development" },
   { value: "scrum-master", label: "Scrum Master Certification" },
@@ -1119,6 +1120,7 @@ const features = [
     description: "Build 10+ apps for your professional portfolio",
   },
 ]
+
 const FadeInWhenVisible = ({ children, delay = 0, direction = "up", duration = 0.6 }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -1166,6 +1168,7 @@ const FadeInWhenVisible = ({ children, delay = 0, direction = "up", duration = 0
     </motion.div>
   )
 }
+
 const AccordionItem = ({ week, topic, hours, details, index }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [ref, inView] = useInView({
@@ -1243,6 +1246,7 @@ const AccordionItem = ({ week, topic, hours, details, index }) => {
     </motion.div>
   )
 }
+
 const VideoModal = ({ isOpen, onClose, videoSrc }) => {
   if (!isOpen) return null
 
@@ -1273,6 +1277,7 @@ const VideoModal = ({ isOpen, onClose, videoSrc }) => {
     </motion.div>
   )
 }
+
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 3,
@@ -1416,13 +1421,7 @@ const MobileNav = ({ isOpen, onClose, activeSection }) => {
 export default function CourseRegistration() {
   const router = useRouter()
   // Use local storage to persist the selected course
-  const [selectedCourseType, setSelectedCourseType] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("selectedCourse")
-      return saved ? JSON.parse(saved) : "website-development"
-    }
-    return "website-development"
-  })
+  const [selectedCourseType, setSelectedCourseType] = useState("website-development")
 
   const [showForm, setShowForm] = useState(false)
   // Update localStorage when course changes
@@ -1433,12 +1432,24 @@ export default function CourseRegistration() {
     }
   }
 
+  // Default to website-development if the selected course doesn't exist
   const course = courseData[selectedCourseType] || courseData["website-development"]
 
   useEffect(() => {
-    const storedCourse = localStorage.getItem("selectedcourseid")
-    if (storedCourse) {
-      updateSelectedCourse(JSON.parse(storedCourse))
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      try {
+        const storedCourse = localStorage.getItem("selectedcourseid")
+        if (storedCourse) {
+          const parsedCourse = JSON.parse(storedCourse)
+          // Verify the course exists in our data
+          if (courseData[parsedCourse]) {
+            updateSelectedCourse(parsedCourse)
+          }
+        }
+      } catch (error) {
+        console.error("Error loading course from localStorage:", error)
+      }
     }
   }, [])
 
@@ -1535,8 +1546,17 @@ export default function CourseRegistration() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  // Add scroll event listener to detect when to change header style
+  useEffect(() => {
+    const handleScrollForHeader = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScrollForHeader)
+    return () => window.removeEventListener("scroll", handleScrollForHeader)
+  }, [])
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${course.bgGradient}`}>
+    <div className={`min-h-screen bg-gradient-to-br ${course?.bgGradient || "from-blue-50 to-cyan-50"}`}>
       {/* Navigation Progress Bar */}
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-cyan-600 z-50" style={{ scaleX }} />
 
@@ -1549,7 +1569,7 @@ export default function CourseRegistration() {
           <VideoModal
             isOpen={isVideoModalOpen}
             onClose={() => setIsVideoModalOpen(false)}
-            videoSrc={course.videoBackground}
+            videoSrc={course?.videoBackground || "/full.mp4"}
           />
         )}
       </AnimatePresence>
@@ -1560,7 +1580,7 @@ export default function CourseRegistration() {
           href="#registration"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`flex items-center justify-center px-6 py-3 bg-${course.accentColor} text-white font-medium rounded-full shadow-lg shadow-${course.accentColor}/50 relative`}
+          className={`flex items-center justify-center px-6 py-3 bg-${course?.accentColor || "cyan-600"} text-white font-medium rounded-full shadow-lg shadow-${course?.accentColor || "cyan-600"}/50 relative`}
         >
           <motion.span
             className="absolute inset-0 rounded-full bg-cyan-600 opacity-70"
@@ -1591,6 +1611,7 @@ export default function CourseRegistration() {
             </Link>
             {/* Mobile Menu Button */}
             <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label="Toggle menu">
+              {mobileMenuOpen ? <X size={24} /> :  aria-label="Toggle menu">
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             {/* Desktop Navigation */}
@@ -1670,7 +1691,7 @@ export default function CourseRegistration() {
       </div>
 
       {/* Header */}
-      <header className={`sticky top-0 z-40 bg-gradient-to-r ${course.headerBg} text-white shadow-lg`}>
+      <header className={`sticky top-0 z-40 bg-gradient-to-r ${course?.headerBg || "from-blue-600 to-cyan-600"} text-white shadow-lg`}>
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -1678,7 +1699,7 @@ export default function CourseRegistration() {
             className="flex items-center space-x-2"
           >
             <GraduationCap className="w-8 h-8" />
-            <h1 className="text-xl font-bold">{course.title}</h1>
+            <h1 className="text-xl font-bold">{course?.title || "Course Registration"}</h1>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -1718,7 +1739,7 @@ export default function CourseRegistration() {
         <div className="absolute inset-0 z-0">
           <motion.div style={{ y: heroParallax.y }} className="w-full h-full">
             <video autoPlay loop muted playsInline className="w-full h-full object-cover">
-              <source src={course.videoBackground} type="video/mp4" />
+              <source src={course?.videoBackground || "/full.mp4"} type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-black opacity-60"></div>
           </motion.div>
@@ -1737,7 +1758,7 @@ export default function CourseRegistration() {
               transition={{ delay: 0.2 }}
               className="inline-block px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium mb-6"
             >
-              {course.subtitle}
+              {course?.subtitle || "Master Development in 12 Weeks"}
             </motion.span>
 
             <motion.h1
@@ -1746,7 +1767,7 @@ export default function CourseRegistration() {
               transition={{ delay: 0.4 }}
               className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight"
             >
-              Become a {course.title.split(" ")[0]} <br />
+              Become a {course?.title?.split(" ")[0] || "Developer"} <br />
               <span className="text-indigo-300">in Just 12 Weeks</span>
             </motion.h1>
 
@@ -1756,7 +1777,7 @@ export default function CourseRegistration() {
               transition={{ delay: 0.6 }}
               className="text-xl md:text-2xl text-indigo-100 mb-10 max-w-3xl mx-auto"
             >
-              {course.description}
+              {course?.description || "Transform your career with our intensive, project-based program."}
             </motion.p>
 
             <motion.div
@@ -1771,7 +1792,7 @@ export default function CourseRegistration() {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-white text-cyan-600 hover:bg-gray-100 rounded-lg font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Enroll Now - {formatPrice(course.pricing.currentPrice)}
+                Enroll Now - {formatPrice(course?.pricing?.currentPrice || 2499)}
               </motion.a>
 
               <motion.button
@@ -1822,7 +1843,7 @@ export default function CourseRegistration() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <FadeInWhenVisible>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why This {course.title} Course Stands Out</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why This {course?.title || "Course"} Stands Out</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 We've designed this program to give you everything you need to succeed in today's competitive job market
               </p>
@@ -1861,7 +1882,7 @@ export default function CourseRegistration() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <ul className="space-y-6">
-                      {course.highlights.slice(0, Math.ceil(course.highlights.length / 2)).map((highlight, index) => (
+                      {(course?.highlights || []).slice(0, Math.ceil((course?.highlights || []).length / 2)).map((highlight, index) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -1879,7 +1900,7 @@ export default function CourseRegistration() {
                   </div>
                   <div>
                     <ul className="space-y-6">
-                      {course.highlights.slice(Math.ceil(course.highlights.length / 2)).map((highlight, index) => (
+                      {(course?.highlights || []).slice(Math.ceil((course?.highlights || []).length / 2)).map((highlight, index) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -1909,13 +1930,13 @@ export default function CourseRegistration() {
             <FadeInWhenVisible>
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Comprehensive Curriculum</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our {course.schedule.length}-week program covers everything from fundamentals to advanced concepts
+                Our {course?.schedule?.length || 6}-week program covers everything from fundamentals to advanced concepts
               </p>
             </FadeInWhenVisible>
           </div>
 
           <div className="space-y-4">
-            {course.schedule.map((week, index) => (
+            {(course?.schedule || []).map((week, index) => (
               <AccordionItem
                 key={index}
                 week={week.week}
@@ -1932,7 +1953,7 @@ export default function CourseRegistration() {
             <div className="mt-16 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Course Requirements</h3>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {course.requirements.map((req, index) => (
+                {(course?.requirements || []).map((req, index) => (
                   <motion.li
                     key={index}
                     initial={{ opacity: 0, x: -10 }}
@@ -1958,7 +1979,7 @@ export default function CourseRegistration() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4">What You'll Achieve</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 By the end of this program, you'll have the skills and confidence to excel as a professional{" "}
-                {course.title.toLowerCase()} expert
+                {course?.title?.toLowerCase() || "developer"} expert
               </p>
             </FadeInWhenVisible>
           </div>
@@ -1971,7 +1992,7 @@ export default function CourseRegistration() {
                   Skills You'll Master
                 </h3>
                 <ul className="space-y-4">
-                  {course.skills.map((skill, index) => (
+                  {(course?.skills || []).map((skill, index) => (
                     <motion.li
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
@@ -1996,7 +2017,7 @@ export default function CourseRegistration() {
                   Career Outcomes
                 </h3>
                 <div className="space-y-6">
-                  {course.careers.map((career, index) => (
+                  {(course?.careers || []).map((career, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, y: 20 }}
@@ -2044,7 +2065,7 @@ export default function CourseRegistration() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {course.testimonials.map((testimonial, index) => (
+            {(course?.testimonials || []).map((testimonial, index) => (
               <TestimonialCard key={index} testimonial={testimonial} index={index} />
             ))}
           </div>
@@ -2059,17 +2080,17 @@ export default function CourseRegistration() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Flexible Pricing Options</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">Choose the payment plan that works best for you</p>
               <div className="mt-6 inline-block bg-indigo-50 px-4 py-2 rounded-full text-indigo-700">
-                <span className="line-through text-gray-500 mr-2">{formatPrice(course.pricing.fullPrice)}</span>
-                <span className="font-bold">{formatPrice(course.pricing.currentPrice)}</span>
+                <span className="line-through text-gray-500 mr-2">{formatPrice(course?.pricing?.fullPrice || 2999)}</span>
+                <span className="font-bold">{formatPrice(course?.pricing?.currentPrice || 2499)}</span>
                 <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                  SAVE {formatPrice(course.pricing.fullPrice - course.pricing.currentPrice)}
+                  SAVE {formatPrice((course?.pricing?.fullPrice || 2999) - (course?.pricing?.currentPrice || 2499))}
                 </span>
               </div>
             </FadeInWhenVisible>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {course.pricing.paymentPlans.map((plan, index) => (
+            {(course?.pricing?.paymentPlans || []).map((plan, index) => (
               <FadeInWhenVisible key={index} delay={index * 0.1}>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
@@ -2370,7 +2391,7 @@ export default function CourseRegistration() {
                       </div>
                       <div>
                         <span className="font-medium">Early Bird Discount:</span> Save{" "}
-                        {formatPrice(course.pricing.fullPrice - course.pricing.currentPrice)} when you enroll today
+                        {formatPrice((course?.pricing?.fullPrice || 2999) - (course?.pricing?.currentPrice || 2499))} when you enroll today
                       </div>
                     </motion.li>
                     <motion.li className="flex items-start" whileHover={{ x: 5 }}>
@@ -2441,7 +2462,7 @@ export default function CourseRegistration() {
       </section>
 
       {/* Final CTA */}
-      <section className={`py-16 bg-gradient-to-r ${course.headerBg} text-white`}>
+      <section className={`py-16 bg-gradient-to-r ${course?.headerBg || "from-blue-600 to-cyan-600"} text-white`}>
         <div className="max-w-6xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Launch Your New Career?</h2>
@@ -2564,4 +2585,3 @@ export default function CourseRegistration() {
     </div>
   )
 }
-
