@@ -884,79 +884,81 @@ export default function Navbar() {
             </div>
           </div>
         </section>
+{/* Fixed Action Buttons - Preserved Structure with Mobile Optimizations */}
+<div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col space-y-2 z-50">
+  {/* Download Brochure */}
+  <button className="flex items-center justify-center bg-violet-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full sm:rounded-lg shadow-md hover:bg-violet-700 transition-all duration-300 text-xs sm:text-sm min-w-[40px] sm:min-w-auto">
+    <Download size={16} className="sm:size-[18px]" />
+    <span className="hidden sm:inline ml-1">Download Brochure</span>
+  </button>
+  
+  {/* Talk to Us */}
+  <div className="relative">
+    <button
+      onClick={() => setShowCall(!showCall)}
+      className="flex items-center justify-center bg-blue-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full sm:rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300 text-xs sm:text-sm min-w-[40px] sm:min-w-auto"
+    >
+      <Phone size={16} className="sm:size-[18px]" />
+      <span className="hidden sm:inline ml-1">Talk to us</span>
+    </button>
+    
+    {showCall && (
+      <div className="absolute right-0 bottom-full mb-2 mr-0 sm:mr-2 bg-white p-3 shadow-lg rounded-lg border border-gray-200 animate-fadeIn text-left w-[160px] sm:w-auto">
+        <p className="text-gray-700 text-xs sm:text-sm">Call us at:</p>
+        <p className="font-semibold text-sm sm:text-base">+1 234 567 890</p>
+      </div>
+    )}
+  </div>
+  
+  {/* Chat with Us */}
+  <div className="relative">
+    <button
+      onClick={() => setShowChat(!showChat)}
+      className="flex items-center justify-center bg-green-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-full sm:rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 text-xs sm:text-sm min-w-[40px] sm:min-w-auto"
+    >
+      <MessageCircle size={16} className="sm:size-[18px]" />
+      <span className="hidden sm:inline ml-1">Chat with us</span>
+    </button>
+    
+    {showChat && (
+      <div className="absolute right-0 bottom-full mb-2 mr-0 sm:mr-2 bg-white p-3 shadow-lg rounded-lg border border-gray-200 animate-fadeIn text-left w-[160px] sm:w-auto">
+        <p className="text-gray-700 text-xs sm:text-sm">Chat via WhatsApp:</p>
+        <a
+          href="https://wa.me/1234567890"
+          target="_blank"
+          className="text-green-600 font-semibold hover:underline flex items-center text-sm sm:text-base"
+          rel="noreferrer"
+        >
+          Open Chat <FaArrowRight className="ml-1" />
+        </a>
+      </div>
+    )}
+  </div>
+</div>
 
-        {/* Fixed Action Buttons */}
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col space-y-2 z-50">
-          {/* Download Brochure */}
-          <button className="flex items-center space-x-1 sm:space-x-2 bg-violet-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg shadow-md hover:bg-violet-700 transition-all duration-300 text-xs sm:text-sm">
-            <Download size={14} className="sm:size-[18px]" />
-            <span>Download Brochure</span>
-          </button>
-          
-          {/* Talk to Us */}
-          <button
-            onClick={() => setShowCall(!showCall)}
-            className="flex items-center space-x-1 sm:space-x-2 bg-blue-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300 text-xs sm:text-sm relative"
-          >
-            <Phone size={14} className="sm:size-[18px]" />
-            <span>Talk to us</span>
-            
-            {showCall && (
-              <div className="absolute right-full bottom-0 mr-2 bg-white p-3 shadow-lg rounded-lg border border-gray-200 animate-fadeIn text-left">
-                <p className="text-gray-700 text-xs sm:text-sm">Call us at:</p>
-                <p className="font-semibold text-sm sm:text-base">+1 234 567 890</p>
-              </div>
-            )}
-          </button>
-          
-          {/* Chat with Us */}
-          <button
-            onClick={() => setShowChat(!showChat)}
-            className="flex items-center space-x-1 sm:space-x-2 bg-green-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 text-xs sm:text-sm relative"
-          >
-            <MessageCircle size={14} className="sm:size-[18px]" />
-            <span>Chat with us</span>
-            
-            {showChat && (
-              <div className="absolute right-full bottom-0 mr-2 bg-white p-3 shadow-lg rounded-lg border border-gray-200 animate-fadeIn text-left">
-                <p className="text-gray-700 text-xs sm:text-sm">Chat via WhatsApp:</p>
-                <a
-                  href="https://wa.me/1234567890"
-                  target="_blank"
-                  className="text-green-600 font-semibold hover:underline flex items-center text-sm sm:text-base"
-                  rel="noreferrer"
-                >
-                  Open Chat <FaArrowRight className="ml-1" />
-                </a>
-              </div>
-            )}
-          </button>
-        </div>
-
-        {/* Cookie Banner */}
-        {show && (
-          <div className="fixed bottom-0 w-full bg-[#0b0b27] text-white p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-center z-40 animate-slideUp text-xs sm:text-sm">
-            <p className="mb-2 sm:mb-0">
-              We use Cookies on this site to enhance your experience and improve our marketing efforts. To learn more,
-              click on
-              <button className="ml-1 sm:ml-2 bg-[#3d348b] text-white px-2 py-1 sm:px-4 sm:py-2 rounded hover:bg-[#2a2561] transition-colors text-xs sm:text-sm">
-                About Cookies
-              </button>
-            </p>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <button className="bg-white text-[#0b0b27] px-3 py-1 sm:px-6 sm:py-2 rounded hover:bg-gray-200 transition-colors text-xs sm:text-sm">
-                Accept
-              </button>
-              <button
-                onClick={() => setShow(false)}
-                className="text-gray-400 hover:text-white transition-colors"
-                aria-label="Close"
-              >
-                <X size={16} className="sm:size-[18px]" />
-              </button>
-            </div>
-          </div>
-        )}
+{/* Cookie Banner - Preserved Structure with Mobile Optimizations */}
+{show && (
+  <div className="fixed bottom-0 left-0 right-0 bg-[#0b0b27] text-white p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-center z-40 animate-slideUp text-xs sm:text-sm">
+    <p className="mb-2 sm:mb-0 text-center sm:text-left px-2">
+      We use Cookies on this site to enhance your experience and improve our marketing efforts. To learn more, click on
+      <button className="ml-1 sm:ml-2 bg-[#3d348b] text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded hover:bg-[#2a2561] transition-colors">
+        About Cookies
+      </button>
+    </p>
+    <div className="flex items-center gap-2 sm:gap-3">
+      <button className="bg-white text-[#0b0b27] px-3 py-1 sm:px-4 sm:py-1.5 rounded hover:bg-gray-200 transition-colors whitespace-nowrap">
+        Accept
+      </button>
+      <button
+        onClick={() => setShow(false)}
+        className="text-gray-400 hover:text-white transition-colors p-1"
+        aria-label="Close"
+      >
+        <X size={16} className="sm:size-[18px]" />
+      </button>
+    </div>
+  </div>
+)}
 
         {/* Footer */}
         <footer className="bg-gray-900 text-white py-8 sm:py-10 px-4 sm:px-6">
